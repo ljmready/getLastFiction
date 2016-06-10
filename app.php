@@ -8,7 +8,7 @@ while (true) {
         $spider = new Spider($config, $oneStory);
         $spider->start();
     }
-    //sleep(1000);
+    sleep(60);
 }
 class Spider {
     private $client ;
@@ -52,7 +52,7 @@ class Spider {
             $url = $this->story['FIRST_SECTION_URL'];
         }
         $this->build($url);
-        echo "爬完了。";
+        echo $this->story['STORY_NAME'] . "爬完了。";
     }
 
     /**
