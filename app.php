@@ -1,18 +1,21 @@
 <?php
 use Goutte\Client;
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/config/config.php';
 
-$spider = new Spider;
+$spider = new Spider($config);
 $spider->start();
 class Spider {
     private $client ;
     private $connection ;
     private $story_name = '完美世界';
     private $begin_url ;
-    public function __construct() {
+    private $config;
+    public function __construct($config) {
+        $this->config = $config;
         $this->client = new Client();
         //数据库
-        $this->connection = mysqli_connect("localhost","root","root","story");
+        $this->connection = mysqli_connect($this->config['DB_HOST'], $this->config['DB_USER'], $this->config['DB_PWD'], $this->config['DB_NAME']);
         // Check connection
         if (mysqli_connect_errno($this->connection))
         {

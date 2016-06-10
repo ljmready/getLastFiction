@@ -1,10 +1,14 @@
 <?php
 require __DIR__ . '/../vendor/phpmailer/phpmailer/PHPMailerAutoload.php';
-$mail = new SendMail;
+require __DIR__ . '/../config/config.php';
+$mail = new SendMail($config);
 $mail->start();
+
 class SendMail {
-    public function __construct() {
-        $this->connection = mysqli_connect("localhost","root","root","story");
+    private $config;
+    public function __construct($config) {
+        $this->config = $config;
+        $this->connection = mysqli_connect($this->config['DB_HOST'], $this->config['DB_USER'], $this->config['DB_PWD'], $this->config['DB_NAME']);
         // Check connection
         if (mysqli_connect_errno($this->connection))
         {
@@ -43,16 +47,16 @@ class SendMail {
         //$mail->SMTPDebug = 3;                               // Enable verbose debug output
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.mxhichina.com;';  // Specify main and backup SMTP servers
+        $mail->Host = $this->config['MAIL_HOST'];  // Specify main and backup SMTP servers
         //$mail->Host = 'smtp.163.com;smtp2.example.com';  // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'jaylin@jaylin.me';                 // SMTP username
-        $mail->Password = '617112ljM';                           // SMTP password
+        $mail->Username = $this->config['MAIL_USERNAME'];                 // SMTP username
+        $mail->Password = $this->config['MAIL_PASSWORD'];                           // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 25;                                    // TCP port to connect to
+        $mail->Port = $this->config['MAIL_PORT'];                                    // TCP port to connect to
 
-        $mail->setFrom('jaylin@jaylin.me', '小说更新助手');
-        $mail->addAddress('408040409@qq.com', 'ljmready');     // Add a recipient
+        $mail->setFrom($this->config['MAIL_FROM'], '小说更新助手');
+        $mail->addAddress($this->config['MAIL_TO'], 'ljmready');     // Add a recipient
 /*
  *        $mail->addAddress('ellen@example.com');               // Name is optional
  *        $mail->addReplyTo('info@example.com', 'Information');
