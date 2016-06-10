@@ -8,7 +8,8 @@ php app.php
 
 ```
 
-定时任务发送email
+- 定时任务 发送email
+小心邮箱爆了。
 
 ```
 crontab -e

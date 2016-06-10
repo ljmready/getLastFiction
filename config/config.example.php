@@ -12,3 +12,19 @@ $config = [
     'MAIL_FROM' => '', //发件人
     'MAIL_TO' => '', //收件人
 ];
+//要拉取的小说链接
+//目前只支持笔趣阁网
+$story = [
+    [
+        'STORY_NAME' => '完美世界',
+        'FIRST_SECTION_URL' => 'http://www.biquge.la/book/14/9609.html',
+        'START_SECTION_URL' => '',
+    ],
+    [
+        'STORY_NAME' => '雪鹰领主',
+        'FIRST_SECTION_URL' => 'http://www.biquge.la/book/5094/3118156.html',
+        'START_SECTION_URL' => '',
+    
+    ]
+
+];

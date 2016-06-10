@@ -3,16 +3,22 @@ use Goutte\Client;
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/config/config.php';
 
-$spider = new Spider($config);
-$spider->start();
+while (true) {
+    foreach($story as $oneStory) {
+        $spider = new Spider($config, $oneStory);
+        $spider->start();
+    }
+    //sleep(1000);
+}
 class Spider {
     private $client ;
     private $connection ;
-    private $story_name = '完美世界';
+    private $story;
     private $begin_url ;
     private $config;
-    public function __construct($config) {
+    public function __construct($config, $story) {
         $this->config = $config;
+        $this->story = $story;
         $this->client = new Client();
         //数据库
         $this->connection = mysqli_connect($this->config['DB_HOST'], $this->config['DB_USER'], $this->config['DB_PWD'], $this->config['DB_NAME']);
@@ -25,7 +31,7 @@ class Spider {
         $this->connection->query("set names utf8");
 
         //手动从某一章开始
-        //$this->begin_url = 'http://www.biquge.la/book/14/4020582.html';
+        $this->begin_url = $this->story['START_SECTION_URL'];
     
     }
     /**
@@ -33,7 +39,7 @@ class Spider {
      */
     public function start() {
         //获取需要开始爬取的url
-        $query = "SELECT url FROM story WHERE story_name = '{$this->story_name}' ORDER BY id DESC LIMIT 1";
+        $query = "SELECT url FROM story WHERE story_name = '{$this->story['STORY_NAME']}' ORDER BY id DESC LIMIT 1";
         $res = $this->fetchOneRow($this->connection, $query);
         if($this->begin_url) {
             $url = $this->begin_url;
@@ -43,7 +49,7 @@ class Spider {
             $url = $res;
         }else {
             //第一章
-            $url = 'http://www.biquge.la/book/14/9609.html';
+            $url = $this->story['FIRST_SECTION_URL'];
         }
         $this->build($url);
         echo "爬完了。";
@@ -73,7 +79,7 @@ class Spider {
         if(!$thisSection) {
             //数据库未有此章节
             //保存
-            $this->save($title, $sectionContent, $url, $this->story_name);
+            $this->save($title, $sectionContent, $url, $this->story['STORY_NAME']);
 
         }
         try {
