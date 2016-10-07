@@ -4,11 +4,15 @@ require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/config/config.php';
 
 while (true) {
+    try {
     foreach($story as $oneStory) {
         $spider = new Spider($config, $oneStory);
         $spider->start();
     }
     sleep(60);
+    }catch(Exception $e) {
+        echo $e->getMessage();
+    }
 }
 class Spider {
     private $client ;

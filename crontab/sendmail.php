@@ -52,7 +52,7 @@ class SendMail {
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
         $mail->Username = $this->config['MAIL_USERNAME'];                 // SMTP username
         $mail->Password = $this->config['MAIL_PASSWORD'];                           // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->SMTPSecure = $this->config['MAIL_SECURE'];                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = $this->config['MAIL_PORT'];                                    // TCP port to connect to
 
         $mail->setFrom($this->config['MAIL_FROM'], '小说更新助手');
